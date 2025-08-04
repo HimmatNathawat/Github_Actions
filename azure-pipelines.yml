@@ -1,0 +1,77 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool: TOdoApp
+
+stages:
+  - stage: teststage
+    jobs:
+      - job: teststagejob
+        steps:
+          - task: TerraformInstaller@1
+            displayName: terraform install
+            inputs:
+              terraformVersion: 'latest'
+          - task: TerraformTask@5
+            displayName: terraform init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
+              backendServiceArm: 'ToDoapp-app'
+              backendAzureRmOverrideSubscriptionID: '4a8882d8-040a-43b9-81c8-844e324752c0'
+              backendAzureRmResourceGroupName: 'Himmat_Rg_group'
+              backendAzureRmStorageAccountName: 'himmatstorage8000'
+              backendAzureRmContainerName: 'infracontaner'
+              backendAzureRmKey: 'devterraform.tfstate'
+          - task: TerraformTask@5
+            displayName: terraform validate
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+          - task: TerraformTask@5
+            displayName: terraform plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
+              environmentServiceNameAzureRM: 'ToDoapp-app'
+
+  - stage: manualvalidation
+    jobs:
+      - job: manualvalidationjob
+        pool: server
+        steps:
+          - task: ManualValidation@1
+            displayName: Manualvalidation
+            inputs:
+              notifyUsers: 'himmatnathawat8000@gmail.com'
+              approvers: 'himmatnathawat8000@gmail.com'
+  
+  - stage: deploymentstage
+    jobs:
+      - job: deploymentjob
+        steps:
+          - task: TerraformInstaller@1
+            inputs:
+               terraformVersion: 'latest'
+          - task: TerraformTask@5
+            displayName: Terraform init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
+              backendServiceArm: 'ToDoapp-app'
+              backendAzureRmResourceGroupName: 'Himmat_Rg_group'
+              backendAzureRmStorageAccountName: 'himmatstorage8000'
+              backendAzureRmContainerName: 'infracontaner'
+              backendAzureRmKey: 'devterraform.tfstate'
+          - task: TerraformTask@5
+            displayName: Terraform Apply
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
+              environmentServiceNameAzureRM: 'ToDoapp-app'

@@ -1,0 +1,81 @@
+digraph G {
+  rankdir = "RL";
+  node [shape = rect, fontname = "sans-serif"];
+  subgraph "cluster_module.ToDo_NIC_association_module" {
+    label = "module.ToDo_NIC_association_module"
+    fontname = "sans-serif"
+    "module.ToDo_NIC_association_module.data.azurerm_network_interface.ToDo_NIC" [label="data.azurerm_network_interface.ToDo_NIC"];
+    "module.ToDo_NIC_association_module.data.azurerm_network_security_group.ToDo_NSG" [label="data.azurerm_network_security_group.ToDo_NSG"];
+    "module.ToDo_NIC_association_module.azurerm_network_interface_security_group_association.nsg-nic-assoc" [label="azurerm_network_interface_security_group_association.nsg-nic-assoc"];
+  }
+  subgraph "cluster_module.ToDo_Nic_module" {
+    label = "module.ToDo_Nic_module"
+    fontname = "sans-serif"
+    "module.ToDo_Nic_module.data.azurerm_public_ip.ToDo_pip" [label="data.azurerm_public_ip.ToDo_pip"];
+    "module.ToDo_Nic_module.data.azurerm_subnet.ToDo_subnet" [label="data.azurerm_subnet.ToDo_subnet"];
+    "module.ToDo_Nic_module.azurerm_network_interface.ToDo_NIC" [label="azurerm_network_interface.ToDo_NIC"];
+  }
+  subgraph "cluster_module.ToDo_Rg_module" {
+    label = "module.ToDo_Rg_module"
+    fontname = "sans-serif"
+    "module.ToDo_Rg_module.azurerm_resource_group.ToDo_Resource_Group" [label="azurerm_resource_group.ToDo_Resource_Group"];
+  }
+  subgraph "cluster_module.ToDo_SQL_database_module" {
+    label = "module.ToDo_SQL_database_module"
+    fontname = "sans-serif"
+    "module.ToDo_SQL_database_module.data.azurerm_mssql_server.SQL_server" [label="data.azurerm_mssql_server.SQL_server"]; 
+    "module.ToDo_SQL_database_module.azurerm_mssql_database.TodoDB" [label="azurerm_mssql_database.TodoDB"];
+  }
+  subgraph "cluster_module.ToDo_SQL_server_module" {
+    label = "module.ToDo_SQL_server_module"
+    fontname = "sans-serif"
+    "module.ToDo_SQL_server_module.azurerm_mssql_server.SQL_server" [label="azurerm_mssql_server.SQL_server"];
+  }
+  subgraph "cluster_module.ToDo_Vm_module" {
+    label = "module.ToDo_Vm_module"
+    fontname = "sans-serif"
+    "module.ToDo_Vm_module.data.azurerm_network_interface.ToDo_NIC" [label="data.azurerm_network_interface.ToDo_NIC"];     
+    "module.ToDo_Vm_module.data.azurerm_public_ip.ToDo_pip" [label="data.azurerm_public_ip.ToDo_pip"];
+    "module.ToDo_Vm_module.azurerm_linux_virtual_machine.vm" [label="azurerm_linux_virtual_machine.vm"];
+  }
+  subgraph "cluster_module.ToDo_Vnet_module" {
+    label = "module.ToDo_Vnet_module"
+    fontname = "sans-serif"
+    "module.ToDo_Vnet_module.azurerm_virtual_network.ToDo_Vnet" [label="azurerm_virtual_network.ToDo_Vnet"];
+  }
+  subgraph "cluster_module.ToDo_pip_module" {
+    label = "module.ToDo_pip_module"
+    fontname = "sans-serif"
+    "module.ToDo_pip_module.azurerm_public_ip.ToDo_pip" [label="azurerm_public_ip.ToDo_pip"];
+  }
+  subgraph "cluster_module.ToDo_subnet_module" {
+    label = "module.ToDo_subnet_module"
+    fontname = "sans-serif"
+    "module.ToDo_subnet_module.azurerm_subnet.ToDo_subnet" [label="azurerm_subnet.ToDo_subnet"];
+  }
+  subgraph "cluster_module.nsg_module" {
+    label = "module.nsg_module"
+    fontname = "sans-serif"
+    "module.nsg_module.azurerm_network_security_group.nsg" [label="azurerm_network_security_group.nsg"];
+  }
+  "module.ToDo_NIC_association_module.data.azurerm_network_interface.ToDo_NIC" -> "module.nsg_module.azurerm_network_security_group.nsg";
+  "module.ToDo_NIC_association_module.data.azurerm_network_security_group.ToDo_NSG" -> "module.nsg_module.azurerm_network_security_group.nsg";
+  "module.ToDo_NIC_association_module.azurerm_network_interface_security_group_association.nsg-nic-assoc" -> "module.ToDo_NIC_association_module.data.azurerm_network_interface.ToDo_NIC";
+  "module.ToDo_NIC_association_module.azurerm_network_interface_security_group_association.nsg-nic-assoc" -> "module.ToDo_NIC_association_module.data.azurerm_network_security_group.ToDo_NSG";
+  "module.ToDo_Nic_module.data.azurerm_public_ip.ToDo_pip" -> "module.ToDo_pip_module.azurerm_public_ip.ToDo_pip";
+  "module.ToDo_Nic_module.data.azurerm_public_ip.ToDo_pip" -> "module.ToDo_subnet_module.azurerm_subnet.ToDo_subnet";      
+  "module.ToDo_Nic_module.data.azurerm_subnet.ToDo_subnet" -> "module.ToDo_pip_module.azurerm_public_ip.ToDo_pip";
+  "module.ToDo_Nic_module.data.azurerm_subnet.ToDo_subnet" -> "module.ToDo_subnet_module.azurerm_subnet.ToDo_subnet";      
+  "module.ToDo_Nic_module.azurerm_network_interface.ToDo_NIC" -> "module.ToDo_Nic_module.data.azurerm_public_ip.ToDo_pip"; 
+  "module.ToDo_Nic_module.azurerm_network_interface.ToDo_NIC" -> "module.ToDo_Nic_module.data.azurerm_subnet.ToDo_subnet"; 
+  "module.ToDo_SQL_database_module.data.azurerm_mssql_server.SQL_server" -> "module.ToDo_SQL_server_module.azurerm_mssql_server.SQL_server";
+  "module.ToDo_SQL_database_module.azurerm_mssql_database.TodoDB" -> "module.ToDo_SQL_database_module.data.azurerm_mssql_server.SQL_server";
+  "module.ToDo_SQL_server_module.azurerm_mssql_server.SQL_server" -> "module.ToDo_Vm_module.azurerm_linux_virtual_machine.vm";
+  "module.ToDo_Vm_module.data.azurerm_network_interface.ToDo_NIC" -> "module.ToDo_Nic_module.azurerm_network_interface.ToDo_NIC";
+  "module.ToDo_Vm_module.data.azurerm_public_ip.ToDo_pip" -> "module.ToDo_Nic_module.azurerm_network_interface.ToDo_NIC";  
+  "module.ToDo_Vm_module.azurerm_linux_virtual_machine.vm" -> "module.ToDo_Vm_module.data.azurerm_network_interface.ToDo_NIC";
+  "module.ToDo_Vm_module.azurerm_linux_virtual_machine.vm" -> "module.ToDo_Vm_module.data.azurerm_public_ip.ToDo_pip";     
+  "module.ToDo_Vnet_module.azurerm_virtual_network.ToDo_Vnet" -> "module.ToDo_Rg_module.azurerm_resource_group.ToDo_Resource_Group";
+  "module.ToDo_pip_module.azurerm_public_ip.ToDo_pip" -> "module.ToDo_Rg_module.azurerm_resource_group.ToDo_Resource_Group";
+  "module.ToDo_subnet_module.azurerm_subnet.ToDo_subnet" -> "module.ToDo_Vnet_module.azurerm_virtual_network.ToDo_Vnet";   
+  "module.nsg_module.azurerm_network_security_group.nsg" -> "module.ToDo_Nic_module.azurerm_network_interface.ToDo_NIC";   
