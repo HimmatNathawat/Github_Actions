@@ -1,0 +1,23 @@
+name: "dhondhu maharaj"
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'main'
+  pull_request:
+    branches: 
+      - 'feature/*'
+      - 'main'
+
+jobs:
+  dhondujob:
+    name: dhondujob
+    runs-on: self-hosted
+    
+    steps:
+      - name: himmat singh
+        run: echo himmat singh nathawat
+      
+   
+    
