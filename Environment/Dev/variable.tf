@@ -47,3 +47,9 @@ variable "ToDo_Nic_var_assoyion" {
   type = map(any)
 
 }
+# variable "bastion_variable" {
+#   type = map(any)
+
+# }
+
+

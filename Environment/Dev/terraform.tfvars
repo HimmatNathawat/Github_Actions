@@ -152,9 +152,17 @@ ToDo_Nic_var_assoyion = {
     nic_id              = "ToDo_NIC01"
     nsg_id              = "ToDo_NSG"
     resource_group_name = "Himmat_ToDo_group"
-  }
+  }}
 
   //demo test aergijawerweij 
 
-}
+# bastion_variable = {
+#   bastion1 = {
+#     name                  = "dev-bastion"
+#     location              = "japan east"
+#     resource_group_name   = "Himmat_ToDo_group"
+#     subnet_id             = "<subnet_id_for_bastion>"
+#     # public_ip_address_id  = "<public_ip_id_for_bastion>"
+#   }
+# }
 

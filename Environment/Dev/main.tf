@@ -63,3 +63,13 @@ module "ToDo_NIC_association_module" {
   depends_on        = [module.nsg_module, module.ToDo_Nic_module]
 }
 
+
+// ...existing code...
+
+# module "bastion" {
+#   source                = "../../ChildModule/azurerm_bastion"
+#   bastion_hosts      = var.bastion_variable
+ 
+
+# }
+// ...existing code...
