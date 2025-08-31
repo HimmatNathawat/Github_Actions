@@ -14,7 +14,7 @@ on:
 jobs:
   dhondujob:
     name: dhondujob
-    runs-on: self-hosted
+    runs-on: DESKTOP-M8MOPJL
     
     steps:
       - name: Checkout
@@ -25,15 +25,7 @@ jobs:
         with:
           version: 1.13.0
 
-      # - name: Azure Login
-      #   uses: Azure/login@v2.3.0
-      #   with:
-      #     client-id: # optiona
-      #     tenant-id: # optiona
-      #     subscription-id: # optional
-
-      # - name: terraform fmt
-          
+  
                   
 
 
