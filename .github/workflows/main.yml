@@ -14,7 +14,7 @@ on:
 jobs:
   dhondujob:
     name: dhondujob
-    runs-on: DESKTOP-M8MOPJL
+    runs-on: self-hosted
     
     steps:
       - name: Checkout
