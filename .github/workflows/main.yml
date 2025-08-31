@@ -1,6 +1,5 @@
 name: "Infra Pipeline"
 
-permissions: 
   
 on:
   push:
