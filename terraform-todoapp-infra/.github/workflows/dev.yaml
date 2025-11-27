@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
         with:
-         clean: true
+         clean: false
          persist-credentials: false
     
       - name: Azure Login
@@ -35,7 +35,6 @@ jobs:
         run: terraform fmt -check
         continue-on-error: true
         working-directory: environments/dev
-        
         
       - name: Terraform Init
         id: init
@@ -62,7 +61,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5.0.0
         with:
-         clean: true
+         clean: false
          persist-credentials: false
     
       - name: Azure Login
