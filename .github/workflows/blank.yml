@@ -16,6 +16,10 @@ jobs:
   terraform-init-plan:
     runs-on: self-hosted
     steps: 
+      - name: Clean temp folder
+        run: Remove-Item -Recurse -Force C:\actions-runner\_work\_temp\* || echo "Ignore errors"
+        shell: powershell
+        
       - name: Checkout
         uses: actions/checkout@v5.0.0
         with:
