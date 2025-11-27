@@ -1,0 +1,83 @@
+name: "Dev Terraform Workflow"
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main      
+
+permissions:
+  id-token: write
+  contents: read
+  
+jobs: 
+  terraform-init-plan:
+    runs-on: self-hosted
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+        with:
+         clean: false
+         persist-credentials: false
+    
+      - name: Azure Login
+        uses: Azure/login@v2.3.0
+        with:
+          client-id: bb4f5aee-1114-4c74-b808-02ed0cedb4ff
+          tenant-id: 3d4d17ea-1ae4-4705-947e-51369c5a5f79
+          subscription-id: b6172f60-9a69-46ff-b334-298e40a9d743
+            
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+        working-directory: environments/dev
+        
+      - name: Terraform Init
+        id: init
+        run: terraform init -input=false  
+        working-directory: environments/dev
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        working-directory: environments/dev        
+      
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -input=false
+        continue-on-error: true
+        working-directory: environments/dev    
+        
+  terraform-apply:    
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/main'
+    needs: terraform-init-plan
+    environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+        with:
+         clean: false
+         persist-credentials: false
+    
+      - name: Azure Login
+        uses: Azure/login@v2.3.0
+        with:
+          client-id: bb4f5aee-1114-4c74-b808-02ed0cedb4ff
+          tenant-id: 3d4d17ea-1ae4-4705-947e-51369c5a5f79
+          subscription-id: b6172f60-9a69-46ff-b334-298e40a9d743 
+          
+      - name: Terraform Init
+        id: init
+        run: terraform init -input=false  
+        working-directory: environments/dev
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply --auto-approve
+        continue-on-error: true
+        working-directory: environments/dev              
+          
