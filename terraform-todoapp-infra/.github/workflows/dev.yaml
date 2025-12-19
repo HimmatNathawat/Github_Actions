@@ -16,11 +16,24 @@ jobs:
   terraform-init-plan:
     runs-on: self-hosted
     steps: 
+
+      # 🔥 FIX 1: PowerShell execution policy (Windows runner safe)
+      - name: Set PowerShell Execution Policy
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force
+
+      # 🔥 FIX 2: Cleanup temp (PowerShell compatible)
+      - name: Cleanup runner temp
+        shell: powershell
+        run: |
+          Remove-Item -Recurse -Force C:\actions-runner\_work\_temp\* -ErrorAction SilentlyContinue
+
       - name: Checkout
         uses: actions/checkout@v5.0.0
         with:
-         clean: true
-         persist-credentials: true
+          clean: true
+          persist-credentials: true
     
       - name: Azure Login
         uses: Azure/login@v2.3.0
@@ -56,12 +69,25 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: terraform-init-plan
     environment: dev
-    steps:
+    steps: 
+
+      # 🔥 FIX 1: PowerShell execution policy
+      - name: Set PowerShell Execution Policy
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force
+
+      # 🔥 FIX 2: Cleanup temp
+      - name: Cleanup runner temp
+        shell: powershell
+        run: |
+          Remove-Item -Recurse -Force C:\actions-runner\_work\_temp\* -ErrorAction SilentlyContinue
+
       - name: Checkout
         uses: actions/checkout@v5.0.0
         with:
-         clean: true
-         persist-credentials: true
+          clean: true
+          persist-credentials: true
     
       - name: Azure Login
         uses: Azure/login@v2.3.0
@@ -79,5 +105,4 @@ jobs:
         id: apply
         run: terraform apply --auto-approve
         continue-on-error: true
-        working-directory: environments/dev              
-          
+        working-directory: environments/dev
