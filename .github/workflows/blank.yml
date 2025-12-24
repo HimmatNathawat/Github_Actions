@@ -14,7 +14,7 @@ permissions:
   
 jobs: 
   terraform-init-plan:
-    runs-on: self-hosted
+    runs-on: windows-latest
     steps: 
       - name: Clean temp folder
         run: Remove-Item -Recurse -Force C:\actions-runner\_work\_temp\* || echo "Ignore errors"
@@ -57,7 +57,7 @@ jobs:
         working-directory: environments/dev    
         
   terraform-apply:    
-    runs-on: self-hosted
+    runs-on: windows-latest
     if: github.ref == 'refs/heads/main'
     needs: terraform-init-plan
     environment: dev
